@@ -1,0 +1,4 @@
+how to generate random secret in node
+
+
+node require("crypto").randomBytes(64).toString("hex")
