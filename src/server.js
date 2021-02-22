@@ -9,10 +9,36 @@ const {
 } = require("./errorHandlers")
 
 const listEndpoints = require("express-list-endpoints")
+const cors = require("cors")
+
+//variables
+const whitelist = [process.env.FE_URL_PRODUCTION, process.env.FE_URL_DEV]
+
 //instances
 const server = express()
 
 server.use(express.json())
+// server.use(
+//   cors({
+//     origin:
+//       process.env.NODE_ENV === "production"
+//         ? process.env.FE_URL_PRODUCTION
+//         : process.env.FE_URL_DEV,
+//   })
+// )
+
+server.use(
+  cors({
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) == -1) {
+        callback(null, true) //origin is in the whitelist
+        console.log(origin)
+      } else {
+        callback(new Error("not allowed by Cors"))
+      }
+    },
+  })
+)
 
 //routes
 const albumsRouter = require("./services/albums")
@@ -39,7 +65,11 @@ mongoose
   })
   .then(
     server.listen(port, () => {
-      console.log("server listening on port", port)
+      if (process.env.NODE_ENV === "production") {
+        console.log("server listening on the cloud on port", port)
+      } else {
+        console.log("server listening on locally on port", port)
+      }
     })
   )
   .catch((error) => console.log(error))
