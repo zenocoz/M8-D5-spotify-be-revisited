@@ -59,7 +59,7 @@ console.log(listEndpoints(server))
 const port = process.env.PORT || 3005
 
 mongoose
-  .connect(process.env.MONGO_COMPASS, {
+  .connect("mongodb://localhost:27017/spotify", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
