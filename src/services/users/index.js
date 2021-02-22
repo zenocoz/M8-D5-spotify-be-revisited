@@ -64,17 +64,22 @@ usersRouter.post("/login", async (req, res, next) => {
     //Generate token
     const { accessToken, refreshToken } = await authenticate(user)
 
-    //Send back tokens
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      path: "/",
-    })
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      path: "/users/refreshToken",
-    })
+    //SEND TOKEN WITH COOKIES
 
-    res.send("Ok")
+    // //Send back tokens
+    // res.cookie("accessToken", accessToken, {
+    //   httpOnly: true,
+    //   path: "/",
+    // })
+    // res.cookie("refreshToken", refreshToken, {
+    //   httpOnly: true,
+    //   path: "/users/refreshToken",
+    // })
+
+    //SEND TOKEN DIRECTLY IN RESPONSE
+    res.send({ accessToken: accessToken, refreshToken: refreshToken })
+
+    // res.send("Ok")
   } catch (error) {
     console.log(error)
     next(error)
