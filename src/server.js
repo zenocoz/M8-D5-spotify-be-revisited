@@ -30,7 +30,7 @@ server.use(express.json())
 server.use(
   cors({
     origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) == -1) {
+      if (whitelist.indexOf(origin) !== -1) {
         callback(null, true) //origin is in the whitelist
         console.log(origin)
       } else {
@@ -59,7 +59,7 @@ console.log(listEndpoints(server))
 const port = process.env.PORT || 3005
 
 mongoose
-  .connect("mongodb://localhost:27017/spotify", {
+  .connect(process.env.MONGO_COMPASS, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
